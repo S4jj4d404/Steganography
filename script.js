@@ -42,7 +42,7 @@ const embedMessage = () => {
             canvas.toBlob((blob) => {
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = 'encoded_image.png';
+                link.download = 'encodedimg_bojjad.png';
                 link.click();
             });
         };
