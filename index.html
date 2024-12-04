@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Secret Message Embedder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        #output {
+            margin-top: 20px;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Image Secret Message Embedder</h1>
+    <p>Upload an image and add a secret message to it.</p>
+
+    <input type="file" id="imageInput" accept="image/*">
+    <br><br>
+    <textarea id="secretMessage" placeholder="Type your secret message here" rows="4" cols="50"></textarea>
+    <br><br>
+    <button id="embedButton">Embed Secret Message</button>
+    <br><br>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <div id="output"></div>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const secretMessage = document.getElementById('secretMessage');
+        const embedButton = document.getElementById('embedButton');
+        const canvas = document.getElementById('canvas');
+        const output = document.getElementById('output');
+
+        embedButton.addEventListener('click', () => {
+            const file = imageInput.files[0];
+            if (!file) {
+                alert('Please upload an image first!');
+                return;
+            }
+            const message = secretMessage.value;
+            if (!message) {
+                alert('Please enter a secret message!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const img = new Image();
+                img.onload = function() {
+                    canvas.width = img.width;
+                    canvas.height = img.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.drawImage(img, 0, 0);
+
+                    // Embed the secret message into the image
+                    ctx.fillStyle = 'white';
+                    ctx.font = '20px Arial';
+                    ctx.fillText(message, 10, img.height - 20);
+
+                    // Show the result
+                    const dataURL = canvas.toDataURL('image/png');
+                    const imgOutput = document.createElement('img');
+                    imgOutput.src = dataURL;
+
+                    const downloadLink = document.createElement('a');
+                    downloadLink.href = dataURL;
+                    downloadLink.download = 'secret_image.png';
+                    downloadLink.textContent = 'Download Image with Secret Message';
+
+                    output.innerHTML = '';
+                    output.appendChild(imgOutput);
+                    output.appendChild(document.createElement('br'));
+                    output.appendChild(downloadLink);
+                };
+                img.src = event.target.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    </script>
+</body>
+</html>
