@@ -42,7 +42,7 @@ const embedMessage = () => {
             canvas.toBlob((blob) => {
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = 'encodedimg_bojjad.png';
+                link.download = 'bojjad_image.png';
                 link.click();
             });
         };
@@ -91,7 +91,6 @@ const extractMessage = () => {
 embedButton.addEventListener('click', embedMessage);
 extractButton.addEventListener('click', extractMessage);
 
-// Toggle How to Work Details
 function toggleDetails() {
     const details = document.getElementById('how-to-work-details');
     details.classList.toggle('hidden');
